@@ -282,6 +282,34 @@ class IconicFont(QObject):
 
         # Load font
         if QApplication.instance() is not None:
+            if ttf_filename is None and charmap_filename is None:
+                directory = os.path.join(directory, prefix)
+                for filename in sorted(os.listdir(directory)):
+                    if os.path.isfile(os.path.join(directory, filename)):
+                        if filename.endswith(".ttf"):
+                            if ttf_filename is None:
+                                ttf_filename = filename
+                            else:
+                                raise FontError(
+                                    u"Must put one .ttf file only "
+                                    "in '{0}'".format(directory))
+                        elif filename.endswith(".json"):
+                            if charmap_filename is None:
+                                charmap_filename = filename
+                            else:
+                                raise FontError(
+                                    u"Must put one .json file only "
+                                    "in '{0}'".format(directory))
+
+            if ttf_filename is None:
+                raise FontError(
+                    u"Cannot find ttf font (.ttf) file "
+                    "in '{0}'".format(directory))
+            if charmap_filename is None:
+                raise FontError(
+                    u"Cannot find character map (.json) file "
+                    "in '{0}'".format(directory))
+
             with open(os.path.join(directory, ttf_filename), 'rb') as font_data:
                 id_ = QFontDatabase.addApplicationFontFromData(QByteArray(font_data.read()))
             font_data.close()
@@ -305,11 +333,18 @@ class IconicFont(QObject):
 
             # Verify that vendorized fonts are not corrupt
             if not SYSTEM_FONTS:
-                ttf_hash = MD5_HASHES.get(ttf_filename, None)
+                checksum_file = os.path.join(directory, "md5sum.txt")
+                ttf_hash = None
+                if os.path.exists(checksum_file):
+                    with open(checksum_file, "r") as f:
+                        for line in f:
+                            line = line.strip()
+                            if line.endswith(ttf_filename):
+                                ttf_hash = line.split()[0]
+                                break
                 if ttf_hash is not None:
                     hasher = hashlib.md5()
-                    with open(os.path.join(directory, ttf_filename),
-                              'rb') as f:
+                    with open(os.path.join(directory, ttf_filename), 'rb') as f:
                         content = f.read()
                         hasher.update(content)
                     ttf_calculated_hash_code = hasher.hexdigest()

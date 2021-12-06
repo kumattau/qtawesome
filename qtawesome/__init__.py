@@ -61,26 +61,17 @@ def _instance():
 
     if _resource['iconic'] is None:
         _resource['iconic'] = IconicFont(
-            ('fa',
-             'fontawesome4.7-webfont.ttf',
-             'fontawesome4.7-webfont-charmap.json'),
-            ('fa5',
-             'fontawesome5-regular-webfont.ttf',
-             'fontawesome5-regular-webfont-charmap.json'),
-            ('fa5s',
-             'fontawesome5-solid-webfont.ttf',
-             'fontawesome5-solid-webfont-charmap.json'),
-            ('fa5b',
-             'fontawesome5-brands-webfont.ttf',
-             'fontawesome5-brands-webfont-charmap.json'),
-            ('ei', 'elusiveicons-webfont.ttf', 'elusiveicons-webfont-charmap.json'),
-            ('mdi', 'materialdesignicons5-webfont.ttf',
-             'materialdesignicons5-webfont-charmap.json'),
-            ('mdi6', 'materialdesignicons6-webfont.ttf',
-             'materialdesignicons6-webfont-charmap.json'),
-            ('ph', 'phosphor.ttf', 'phosphor-charmap.json'),
-            ('ri', 'remixicon.ttf', 'remixicon-charmap.json'),
-            ('msc', 'codicon.ttf', 'codicon-charmap.json'),
+            ('fa', None, None),
+            ('fa5', None, None),
+            ('fa5s', None, None),
+            ('fa5s', None, None),
+            ('fa5b', None, None),
+            ('ei', None, None),
+            ('mdi', None, None),
+            ('mdi6', None, None),
+            ('ph', None, None),
+            ('ri', None, None),
+            ('msc', None, None),
         )
     return _resource['iconic']
 
